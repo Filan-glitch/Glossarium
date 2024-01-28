@@ -32,6 +32,8 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -42,6 +44,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Glossarium',
           themeMode: ThemeMode.system,
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
           supportedLocales: const [
             Locale('de', 'DE'),
             Locale('us', 'US'),

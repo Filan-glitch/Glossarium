@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:glossarium/main.dart';
 import 'package:glossarium/models/glossar.dart';
 import 'package:glossarium/storage/database.dart';
 import 'package:glossarium/storage/firestore.dart';
@@ -364,14 +365,14 @@ class _GlossarPageState extends State<GlossarPage>
     try {
       await file.writeAsBytes(await pdf.save());
     } on FileSystemException {
-      ScaffoldMessenger.of(context).showSnackBar(
+      rootScaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(
           content: Text('Glossar konnte nicht als PDF exportiert werden'),
         ),
       );
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
+    rootScaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         content: const Text('Glossar wurde als PDF exportiert'),
         action: SnackBarAction(
