@@ -42,7 +42,7 @@ class _GlossarPageState extends State<GlossarPage>
   final List<String> _sortOptions = ['Titel (A-Z)', 'Titel (Z-A)'];
   String _currentSortOption = 'Titel (A-Z)';
   // Define a variable to hold the current selected sorting option
-  int Function(GlossarEntry, GlossarEntry) _currentSortFunction = (a, b) => a.title.compareTo(b.title);
+  int Function(GlossarEntry, GlossarEntry) _currentSortFunction = (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase());
 
   @override
   void initState() {
@@ -593,13 +593,13 @@ void _addEntryToGlossar(Glossar glossar, GlossarEntry entry) {
                       _currentSortOption = newValue!;
                       // Sort the _filteredGlossarEntrys list based on the selected option
                       if (_currentSortOption == 'Titel (A-Z)') {
-                        _currentSortFunction = (a, b) => a.title.compareTo(b.title);
+                        _currentSortFunction = (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase());
                       } else if (_currentSortOption == 'Titel (Z-A)') {
-                        _currentSortFunction = (a, b) => b.title.compareTo(a.title);
+                        _currentSortFunction = (a, b) => b.title.toLowerCase().compareTo(a.title.toLowerCase());
                       } else if (_currentSortOption == 'Author (A-Z)') {
-                        _currentSortFunction = (a, b) => a.creator!.compareTo(b.creator!);
+                        _currentSortFunction = (a, b) => a.creator!.toLowerCase().compareTo(b.creator!.toLowerCase());
                       } else if (_currentSortOption == 'Author (Z-A)') {
-                        _currentSortFunction = (a, b) => b.creator!.compareTo(a.creator!);
+                        _currentSortFunction = (a, b) => b.creator!.toLowerCase().compareTo(a.creator!.toLowerCase());
                       }
                       _filteredGlossarEntrys.sort(_currentSortFunction);
                     });
