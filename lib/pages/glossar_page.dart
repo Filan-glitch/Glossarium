@@ -321,7 +321,7 @@ class _GlossarPageState extends State<GlossarPage>
     final regular = pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Regular.ttf'));
     final bold = pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
 
-    _glossar?.entries.sort((a, b) => a.title.compareTo(b.title));
+    _glossar?.entries.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
 
     pdf.addPage(
       pw.Page(
