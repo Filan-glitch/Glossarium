@@ -42,7 +42,7 @@ Future<void> loadGlossarys() async {
   final List<Map<String, dynamic>> maps = await db.query('glossarys');
 
   // Convert the List<Map<String, dynamic> into a List<Glossary>.
-  var glossarys =  List.generate(maps.length, (i) {
+  final glossarys =  List.generate(maps.length, (i) {
     return Glossar(
       title: maps[i]['title']
     );
@@ -87,8 +87,8 @@ Future<void> loadGlossaryEntrys() async {
   );
   final List<Map<String, dynamic>> maps = await db.query('entrys');
 
-  var entrys =  List.generate(maps.length, (i) {
-    var entry = GlossarEntry(
+  final entrys =  List.generate(maps.length, (i) {
+    final entry = GlossarEntry(
       title: maps[i]['title'],
       description: maps[i]['description']
     ).toMap();
@@ -172,7 +172,7 @@ Future<void> saveGlossarys() async {
     version: 1,
   );
 
-  var unsyncedGlossars = store.state.glossars.where((glossar) => !glossar.isSynced);
+  final unsyncedGlossars = store.state.glossars.where((glossar) => !glossar.isSynced);
 
   await db.transaction((txn) async {
     for (var glossar in unsyncedGlossars) {
@@ -216,12 +216,12 @@ final Database db = await openDatabase(
     version: 1,
   );
 
-  var unsyncedGlossars = store.state.glossars.where((glossar) => !glossar.isSynced);
+  final unsyncedGlossars = store.state.glossars.where((glossar) => !glossar.isSynced);
 
   await db.transaction((txn) async {
     for (var glossar in unsyncedGlossars) {
       for (var entry in glossar.entries) {
-        var entryMap = entry.toMap();
+        final entryMap = entry.toMap();
         entryMap['glossary'] = glossar.title;
         entryMap.remove('creator');
         await txn.insert('entrys', entryMap, conflictAlgorithm: ConflictAlgorithm.replace);

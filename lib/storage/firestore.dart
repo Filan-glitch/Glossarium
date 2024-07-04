@@ -8,15 +8,15 @@ import '../redux/store.dart';
 import '../redux/actions.dart';
 
 Future<void> loadSyncGlossarys() async {
-  var db = FirebaseFirestore.instance;
-  var syncs = await loadSyncs();
-  var syncIDs = syncs.map((map) {
+  final db = FirebaseFirestore.instance;
+  final syncs = await loadSyncs();
+  final syncIDs = syncs.map((map) {
       return map['id'] as String;
     }
   ).toList();
 
   for(var id in syncIDs) {
-    var glossary = await db.collection('glossarys').doc(id).get();
+    final glossary = await db.collection('glossarys').doc(id).get();
 
     if(!glossary.exists) continue;
     if(glossary.data()!['title'] == null) continue;
@@ -35,15 +35,15 @@ Future<void> loadSyncGlossarys() async {
 }
 
 Future<void> updateSyncGlossarys() async {
-  var db = FirebaseFirestore.instance;
-  var syncs = await loadSyncs();
-  var syncIDs = syncs.map((map) {
+  final db = FirebaseFirestore.instance;
+  final syncs = await loadSyncs();
+  final syncIDs = syncs.map((map) {
       return map['id'] as String;
     }
   ).toList();
 
   for(var id in syncIDs) {
-    var glossary = await db.collection('glossarys').doc(id).get();
+    final glossary = await db.collection('glossarys').doc(id).get();
 
     store.dispatch(
         Action(
@@ -59,8 +59,8 @@ Future<void> updateSyncGlossarys() async {
 }
 
 Future<Glossar?> loadSyncGlossary(String id) async {
-  var db = FirebaseFirestore.instance;
-  var glossary = await db.collection('glossarys').doc(id).get();
+  final db = FirebaseFirestore.instance;
+  final glossary = await db.collection('glossarys').doc(id).get();
 
   return Glossar(
     id: id,
@@ -70,23 +70,23 @@ Future<Glossar?> loadSyncGlossary(String id) async {
 }
 
 Future<String> createSyncGlossary(String glossaryTitle) async {
-  var db = FirebaseFirestore.instance;
-  var doc = await db.collection('glossarys').add({'title': glossaryTitle});
+  final db = FirebaseFirestore.instance;
+  final doc = await db.collection('glossarys').add({'title': glossaryTitle});
   addSync(doc.id);
   return doc.id;
 }
 
 Future<void> addSyncGlossaryEntry(String glossaryID, GlossarEntry entry) async {
-  var db = FirebaseFirestore.instance;
+  final db = FirebaseFirestore.instance;
   await db.collection('glossarys').doc(glossaryID).collection('entrys').doc(entry.title).set({'description': entry.description, 'creator': FirebaseAuth.instance.currentUser?.displayName});
 }
 
 Future<void> updateSyncGlossaryEntry(String glossaryID, GlossarEntry entry) async {
-  var db = FirebaseFirestore.instance;
+  final db = FirebaseFirestore.instance;
   await db.collection('glossarys').doc(glossaryID).collection('entrys').doc(entry.title).set({'description': entry.description, 'creator': FirebaseAuth.instance.currentUser?.displayName});
 }
 
 Future<void> removeSyncGlossaryEntry(String glossaryID, GlossarEntry entry) async {
-  var db = FirebaseFirestore.instance;
+  final db = FirebaseFirestore.instance;
   await db.collection('glossarys').doc(glossaryID).collection('entrys').doc(entry.title).delete();
 }

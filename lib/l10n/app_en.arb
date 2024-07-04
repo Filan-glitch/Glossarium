@@ -1,0 +1,71 @@
+{
+    "importGlossary": "Import glossary",
+    "@importGlossary": {
+        "description": "The title of the import glossary dialog"
+    },
+    "nameOfGlossary": "Name of the glossary",
+    "@nameOfGlossary": {
+        "description": "The label of the name of the glossary field"
+    },
+    "hintNameOfGlossary": "e.g. Glossary 1",
+    "@hintNameOfGlossary": {
+        "description": "The hint of the name of the glossary field"
+    },
+    "glossaryAlreadyExists": "Glossary already exists",
+    "@glossaryAlreadyExists": {
+        "description": "The error message when the glossary already exists"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "The label of the cancel button"
+    },
+    "import": "Import",
+    "@import": {
+        "description": "The label of the import button"
+    },
+    "chooseFileToImport": "Choose file to import",
+    "@chooseFileToImport": {
+        "description": "The label of the choose file to import button"
+    },
+    "chooseFile": "Choose file",
+    "@chooseFile": {
+        "description": "The label of the choose file button"
+    },
+    "fileUnsupportedOrAlreadyExists": "File unsupported or already exists",
+    "@fileUnsupportedOrAlreadyExists": {
+        "description": "The error message when the file is unsupported or already exists"
+    },
+    "addGlossary": "Add a {isShared, plural, =0{local} =1{shared} other{}} glossary",
+    "@addGlossary": {
+        "description": "The label of the add glossary button",
+        "placeholders": {
+            "isShared": {
+                "type": "num"
+            }
+        }
+    },
+    "enterValidName": "Enter a valid name",
+    "@enterValidName": {
+        "description": "The error message when the name is invalid"
+    },
+    "submit": "Submit",
+    "@submit": {
+        "description": "The label of the submit button"
+    },
+    "glossaryList": "Glossary list",
+    "@glossaryList": {
+        "description": "The title of the glossary list"
+    },
+    "delete": "Delete",
+    "@delete": {
+        "description": "The label of the delete button"
+    },
+    "createLocalGlossary": "Create local glossary",
+    "@createLocalGlossary": {
+        "description": "The label of the create local glossary button"
+    },
+    "createSharedGlossary": "Create shared glossary",
+    "@createSharedGlossary": {
+        "description": "The label of the create shared glossary button"
+    }
+}

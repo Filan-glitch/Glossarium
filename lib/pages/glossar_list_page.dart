@@ -7,6 +7,7 @@ import 'package:glossarium/dialogs/import_dialog.dart';
 import 'package:glossarium/dialogs/import_extern_dialog.dart';
 import 'package:glossarium/services/import.dart';
 import 'package:glossarium/storage/firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/glossar.dart';
 import '../redux/state.dart';
@@ -35,7 +36,7 @@ class _GlossarListPageState extends State<GlossarListPage>
     if (Platform.isAndroid) {
       getImportData().then((glossar) async {
         if (glossar != null) {
-          Glossar? newGlossar = await showDialog(
+          final Glossar? newGlossar = await showDialog(
               context: context,
               builder: (context) {
                 return ImportExternDialog(glossar: glossar);
@@ -69,7 +70,7 @@ class _GlossarListPageState extends State<GlossarListPage>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Füge ein${(isSynced) ? ' synchrones' : ''} Glossar hinzu'),
+          title: Text(''),
           content: Form(
             key: _formKey,
             child: Column(
@@ -81,7 +82,7 @@ class _GlossarListPageState extends State<GlossarListPage>
                   },
                   validator: (value) {
                     if (value!.isEmpty || store.state.glossars.any((glossar) => glossar.title == value)) {
-                      return 'Bitte gib einen Name ein';
+                      return 'Bitte gib einen gültigen Namen ein';
                     }
                     return null;
                   },
@@ -238,7 +239,7 @@ class _GlossarListPageState extends State<GlossarListPage>
                     title: const Text('Importieren'),
                     onTap: () async {
                       Navigator.of(context).pop();
-                      Glossar? glossar = await showDialog(
+                      final Glossar? glossar = await showDialog(
                         context: context,
                         builder: (context) {
                           return const ImportDialog();
@@ -267,7 +268,7 @@ class _GlossarListPageState extends State<GlossarListPage>
                         context: context,
                         builder: (context) {
                           bool idExists = false;
-                          var controller = TextEditingController();
+                          final controller = TextEditingController();
                           return AlertDialog(
                             title: const Text('Synchronem Glossar beitreten'),
                             content: Form(
@@ -281,7 +282,7 @@ class _GlossarListPageState extends State<GlossarListPage>
                                       _title = value!;
                                     },
                                     onChanged: (value) async {
-                                      var doc = await FirebaseFirestore.instance.collection('glossarys').doc(value).get();
+                                      final doc = await FirebaseFirestore.instance.collection('glossarys').doc(value).get();
                                       if (doc.exists) {
                                         setState(() {
                                           idExists = true;

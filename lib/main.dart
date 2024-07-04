@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:glossarium/pages/glossar_list_page.dart';
 import 'package:glossarium/pages/glossar_page.dart';
@@ -11,6 +10,7 @@ import 'package:glossarium/redux/state.dart';
 import 'package:glossarium/redux/store.dart';
 import 'package:glossarium/storage/database.dart';
 import 'package:glossarium/storage/firestore.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'firebase_options.dart';
 
@@ -45,17 +45,8 @@ class MyApp extends StatelessWidget {
           title: 'Glossarium',
           themeMode: ThemeMode.system,
           scaffoldMessengerKey: rootScaffoldMessengerKey,
-          supportedLocales: const [
-            Locale('de', 'DE'),
-            Locale('us', 'US'),
-          ],
-          localizationsDelegates:
-              const [
-                // ... app-specific localization delegate[s] here
-                GlobalCupertinoLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
           initialRoute: FirebaseAuth.instance.currentUser == null ? '/' : '/glossar-list',
           routes: {
             '/': (context) {
@@ -64,12 +55,12 @@ class MyApp extends StatelessWidget {
                   AuthStateChangeAction(
                   (context, state) {
                       if(state is UserCreated || state is SignedIn) {
-                        var user = (state is SignedIn)
+                        final user = (state is SignedIn)
                             ? state.user
                             : (state as UserCreated).credential.user;
                         if (user == null) return;
                         if (state is UserCreated && user.displayName == null && user.email != null) {
-                          var defaultDisplayName = user.email!.split('@')[0];
+                          final defaultDisplayName = user.email!.split('@')[0];
                           user.updateDisplayName(defaultDisplayName);
                         }
                         Navigator.of(context).pushReplacementNamed(

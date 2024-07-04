@@ -27,8 +27,8 @@ AppState appReducer(AppState state, action) {
     case ActionTypes.loadGlossaryEntrys:
       return AppState(
           glossars: state.glossars.map((glossar) {
-            var payload = action.payload as List<Map<String, dynamic>>;
-            List<GlossarEntry> entries = [];
+            final payload = action.payload as List<Map<String, dynamic>>;
+            final List<GlossarEntry> entries = [];
             for(var entry in payload.where((element) => element['glossary'] == glossar.title)) {
               entries.add(GlossarEntry.fromMap(entry));
             }

@@ -22,7 +22,7 @@ class _ImportDialogState extends State<ImportDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Importiere Glossar'),
+      title: const Text('Glossar importieren'),
       content: Column(
         children: [
           const Text('Wähle eine Datei aus, um sie zu importieren.'),
@@ -47,19 +47,19 @@ class _ImportDialogState extends State<ImportDialog> {
                     return;
                   }
 
-                  File file = File(_result!.files.single.path!);
-                  List<String> lines = file.readAsLinesSync();
+                  final File file = File(_result!.files.single.path!);
+                  final List<String> lines = file.readAsLinesSync();
 
                   if(lines.isEmpty) {
                     setState(() => _valid = false);
                     return;
                   }
 
-                  List<String> header = lines[0].split(';');
+                  final List<String> header = lines[0].split(';');
                   setState(() => _valid = header.length == 2 && header[0] == 'Begriff' && header[1] == 'Beschreibung');
 
                   for(var line in lines.sublist(1)) {
-                    List<String> row = line.split(';');
+                    final List<String> row = line.split(';');
                     if(row.length != 2 || row[0].isEmpty || row[1].isEmpty || row[0].length > 50 || row[1].length > 500 || row[0].contains(';') || row[1].contains(';') || row[0].contains('\\')) {
                       setState(() => _valid = false);
                       return;
@@ -89,11 +89,11 @@ class _ImportDialogState extends State<ImportDialog> {
               title: _result!.files.single.name.replaceAll('.csv', ''),
             );
 
-            File file = File(_result!.files.single.path!);
-            List<String> lines = file.readAsLinesSync();
+            final File file = File(_result!.files.single.path!);
+            final List<String> lines = file.readAsLinesSync();
 
             for(var line in lines.sublist(1)) {
-              List<String> row = line.split(';');
+              final List<String> row = line.split(';');
               glossar = glossar.copyWith(
                 entries: glossar.entries + [GlossarEntry(
                   title: row[0],

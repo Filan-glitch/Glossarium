@@ -1,0 +1,48 @@
+{
+    "importGlossary": "Glossar importieren",
+    "@importGlossary": {
+        "description": "The title of the import glossary dialog"
+    },
+    "nameOfGlossary": "Name des Glossars",
+    "@nameOfGlossary": {
+        "description": "The label of the name of the glossary field"
+    },
+    "hintNameOfGlossary": "z.B. Glossar 1",
+    "@hintNameOfGlossary": {
+        "description": "The hint of the name of the glossary field"
+    },
+    "glossaryAlreadyExists": "Glossar existiert bereits",
+    "@glossaryAlreadyExists": {
+        "description": "The error message when the glossary already exists"
+    },
+    "cancel": "Abbrechen",
+    "@cancel": {
+        "description": "The label of the cancel button"
+    },
+    "import": "Importieren",
+    "@import": {
+        "description": "The label of the import button"
+    },
+    "chooseFileToImport": "Datei zum Importieren auswählen",
+    "@chooseFileToImport": {
+        "description": "The label of the choose file to import button"
+    },
+    "chooseFile": "Datei auswählen",
+    "@chooseFile": {
+        "description": "The label of the choose file button"
+    },
+    "fileUnsupportedOrAlreadyExists": "Datei wird nicht unterstützt oder existiert bereits",
+    "@fileUnsupportedOrAlreadyExists": {
+        "description": "The error message when the file is unsupported or already exists"
+    },
+    "addGlossary": "Füge ein {synchronous} Glossar hinzu",
+    "@addGlossary": {
+        "description": "The label of the add glossary button",
+        "placeholders": {
+            "synchronous": {
+                "type": "String",
+                "example": "synchrones"
+            }
+        }
+    }
+}

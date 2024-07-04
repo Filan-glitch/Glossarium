@@ -178,7 +178,7 @@ class _GlossarPageState extends State<GlossarPage>
   }
 
   Future<void> _showAddGlossarEntryDialog(GlossarEntry? oldEntry) async {
-    GlossarEntry? newEntry = await showDialog(
+    final GlossarEntry? newEntry = await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -248,7 +248,7 @@ class _GlossarPageState extends State<GlossarPage>
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  var entry = GlossarEntry(
+                  final entry = GlossarEntry(
                     title: _title,
                     description: _description,
                   );
@@ -266,7 +266,7 @@ class _GlossarPageState extends State<GlossarPage>
       return;
     }
     if(oldEntry != null) {
-      var entryMap = newEntry.toMap();
+      final entryMap = newEntry.toMap();
       entryMap['glossary'] = _glossar!.title;
       store.dispatch(
           actions.Action(
@@ -286,7 +286,7 @@ class _GlossarPageState extends State<GlossarPage>
         ).toList());
       });
     } else {
-      var entryMap = newEntry.toMap();
+      final entryMap = newEntry.toMap();
       entryMap['glossary'] = _glossar!.title;
       store.dispatch(
           actions.Action(
@@ -390,8 +390,8 @@ class _GlossarPageState extends State<GlossarPage>
     if (query.isEmpty) {
       return [TextSpan(text: source, style: style), (creator != null) ? TextSpan(text: ' ($creator)', style: const TextStyle(color: Colors.blue)) : const TextSpan()];
     }
-    var splitMap = source.toLowerCase().split(query);
-    List<TextSpan> spans = [];
+    final splitMap = source.toLowerCase().split(query);
+    final List<TextSpan> spans = [];
     var currentIndex = 0;
     for (var element in splitMap) {
       spans.add(TextSpan(text: source.substring(currentIndex, currentIndex + element.length), style: style));
@@ -433,7 +433,7 @@ class _GlossarPageState extends State<GlossarPage>
   }
 
   Future<void> _exportEntries() async {
-  Glossar? glossar = await _selectGlossar();
+  final Glossar? glossar = await _selectGlossar();
 
   if(glossar == null) {
     return;
@@ -503,7 +503,7 @@ List<Widget> _buildDialogActions() {
 }
 
 void _addEntryToGlossar(Glossar glossar, GlossarEntry entry) {
-  var entryMap = entry.toMap();
+  final entryMap = entry.toMap();
   entryMap['glossary'] = glossar.title;
   store.dispatch(
       actions.Action(
@@ -622,9 +622,9 @@ void _addEntryToGlossar(Glossar glossar, GlossarEntry entry) {
                 if(index == _filteredGlossarEntrys.length) {
                   return const SizedBox(height: 80);
                 }
-                String title = _filteredGlossarEntrys[index].title;
-                String description = _filteredGlossarEntrys[index].description;
-                String searchText = _searchController.text.toLowerCase();
+                final String title = _filteredGlossarEntrys[index].title;
+                final String description = _filteredGlossarEntrys[index].description;
+                final String searchText = _searchController.text.toLowerCase();
                 return ListTile(
                   title: RichText(
                     text: TextSpan(

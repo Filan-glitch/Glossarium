@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/glossar.dart';
 import '../redux/state.dart';
@@ -19,14 +20,14 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Importiere Glossar'),
+      title: Text(AppLocalizations.of(context)!.importGlossary),
       content: Column(
         children: [
           TextField(
             controller: _controller,
-            decoration: const InputDecoration(
-              labelText: 'Name des Glossars',
-              hintText: 'z.B. Glossar 1',
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.nameOfGlossary,
+              hintText: AppLocalizations.of(context)!.hintNameOfGlossary,
             ),
           ),
           const SizedBox(height: 20),
@@ -35,7 +36,7 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
             builder: (context, state) {
               return Visibility(
                 visible: _controller.text.isNotEmpty && (state.glossars.any((element) => element.title == _controller.text)),
-                child: const Text('Das Glossar existiert schon.'),
+                child: Text(AppLocalizations.of(context)!.glossaryAlreadyExists),
               );
             }
           ),
@@ -44,7 +45,7 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Abbrechen'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
@@ -53,7 +54,7 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
               onPressed: (_controller.text.isNotEmpty && (state.glossars.any((element) => element.title == _controller.text))) ? null : () {
                 Navigator.of(context).pop(widget.glossar?.copyWith(title: _controller.text));
               },
-              child: const Text('Importieren'),
+              child: Text(AppLocalizations.of(context)!.import),
             );
           },
         ),
