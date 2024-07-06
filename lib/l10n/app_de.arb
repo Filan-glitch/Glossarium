@@ -35,14 +35,87 @@
     "@fileUnsupportedOrAlreadyExists": {
         "description": "The error message when the file is unsupported or already exists"
     },
-    "addGlossary": "Füge ein {synchronous} Glossar hinzu",
-    "@addGlossary": {
-        "description": "The label of the add glossary button",
-        "placeholders": {
-            "synchronous": {
-                "type": "String",
-                "example": "synchrones"
+    "addGlossary": "Erstelle ein {isShared, select, local{lokales} shared{gemeinsames} other{}} Glossar",
+        "@addGlossary": {
+            "description": "The label of the add glossary button",
+            "placeholders": {
+                "isShared": {}
             }
-        }
+        },
+    "enterValidName": "Bitte geben Sie einen gültigen Namen ein",
+    "@enterValidName": {
+        "description": "The error message when the name is invalid"
+    },
+    "submit": "Bestätigen",
+    "@submit": {
+        "description": "The label of the submit button"
+    },
+    "glossaryList": "Glossar Liste",
+    "@glossaryList": {
+        "description": "The title of the glossary list"
+    },
+    "delete": "Löschen",
+    "@delete": {
+        "description": "The label of the delete button"
+    },
+    "createLocalGlossary": "Lokales Glossar erstellen",
+    "@createLocalGlossary": {
+        "description": "The label of the create local glossary button"
+    },
+    "createSharedGlossary": "Gemeinsames Glossar erstellen",
+    "@createSharedGlossary": {
+        "description": "The label of the create shared glossary button"
+    },
+    "leaveGlossaryQuestion": "Möchtest du aus dem synchronisierten Glossar austreten?",
+    "@leaveGlossaryQuestion": {
+        "description": "The question when the user wants to leave the shared glossary"
+    },
+    "deleteGlossaryQuestion": "Möchtest du das Glossar und alle Einträge löschen?",
+    "@deleteGlossaryQuestion": {
+        "description": "The question when the user wants to delete the glossary"
+    },
+    "leave": "Verlassen",
+    "@leave": {
+        "description": "The label of the leave button"
+    },
+    "joinSharedGlossary": "Gemeinsamen Glossar beitreten",
+    "@joinSharedGlossary": {
+        "description": "The label of the join shared glossary button"
+    },
+    "enterJoinCode": "Geben Sie den Beitrittscode ein",
+    "@enterJoinCode": {
+        "description": "The label of the enter join code field"
+    },
+    "invalidJoinCode": "Der Beitrittscode ist ungültig",
+    "@invalidJoinCode": {
+        "description": "The error message when the join code is wrong"
+    },
+    "joinCode": "Beitrittscode",
+    "@joinCode": {
+        "description": "The label of the join code field"
+    },
+    "sortOptionTitleIncreasing": "Titel (A-Z)",
+    "@sortOptionTitleIncreasing": {
+        "description": "The label of the title increasing sort option"
+    },
+    "sortOptionTitleDecreasing": "Titel (Z-A)",
+    "@sortOptionTitleDecreasing": {
+        "description": "The label of the title decreasing sort option"
+    },
+    "sortOptionAuthorIncreasing": "Author (A-Z)",
+    "@sortOptionAuthorIncreasing": {
+        "description": "The label of the author increasing sort option"
+    },
+    "sortOptionAuthorDecreasing": "Author (Z-A)",
+    "@sortOptionAuthorDecreasing": {
+        "description": "The label of the author decreasing sort option"
+    },
+    "addEntry": "Füge einen Eintrag hinzu",
+    "@addEntry": {
+        "description": "The label of the add entry button"
+    },
+    "selectGlossary": "Wähle ein Glossar",
+    "@selectGlossary": {
+        "description": "The label of the select glossary button"
     }
 }

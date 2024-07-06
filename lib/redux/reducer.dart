@@ -1,11 +1,13 @@
 import 'package:glossarium/models/glossar_entry.dart';
 
 import '../models/glossar.dart';
-import 'state.dart';
 import 'actions.dart';
+import 'state.dart';
 
-AppState appReducer(AppState state, action) {
-  if (action is! Action) return state;
+AppState appReducer(AppState state, dynamic action) {
+  if (action is! Action) {
+    return state;
+  }
   switch (action.type) {
     case ActionTypes.clear:
       return AppState();
@@ -16,7 +18,8 @@ AppState appReducer(AppState state, action) {
         glossars: state.glossars.map((glossar) {
           if (glossar.title == action.payload['glossary']) {
             return glossar.copyWith(
-              entries: List.from(glossar.entries)..add(GlossarEntry.fromMap(action.payload)),
+              entries: List.from(glossar.entries)
+                ..add(GlossarEntry.fromMap(action.payload)),
             );
           }
           return glossar;
@@ -26,18 +29,22 @@ AppState appReducer(AppState state, action) {
       return AppState(glossars: action.payload);
     case ActionTypes.loadGlossaryEntrys:
       return AppState(
-          glossars: state.glossars.map((glossar) {
-            final payload = action.payload as List<Map<String, dynamic>>;
-            final List<GlossarEntry> entries = [];
-            for(var entry in payload.where((element) => element['glossary'] == glossar.title)) {
-              entries.add(GlossarEntry.fromMap(entry));
-            }
-            glossar = glossar.copyWith(entries: entries);
-            return glossar;
-          }).toList(),
+        glossars: state.glossars.map((glossar) {
+          final payload = action.payload as List<Map<String, dynamic>>;
+          final List<GlossarEntry> entries = [];
+          for (var entry in payload
+              .where((element) => element['glossary'] == glossar.title)) {
+            entries.add(GlossarEntry.fromMap(entry));
+          }
+          glossar = glossar.copyWith(entries: entries);
+          return glossar;
+        }).toList(),
       );
     case ActionTypes.removeGlossary:
-      return AppState(glossars: state.glossars.where((glossar) => glossar.title != action.payload.title).toList());
+      return AppState(
+          glossars: state.glossars
+              .where((glossar) => glossar.title != action.payload.title)
+              .toList());
     case ActionTypes.updateGlossaryItem:
       return AppState(
         glossars: state.glossars.map((glossar) {
@@ -68,7 +75,10 @@ AppState appReducer(AppState state, action) {
         glossars: state.glossars.map((glossar) {
           if (glossar.title == action.payload['glossary']) {
             return glossar.copyWith(
-              entries: glossar.entries.where((entry) => entry.title != action.payload['title'] as String).toList(),
+              entries: glossar.entries
+                  .where((entry) =>
+                      entry.title != action.payload['title'] as String)
+                  .toList(),
             );
           }
           return glossar;

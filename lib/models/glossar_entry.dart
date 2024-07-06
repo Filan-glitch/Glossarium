@@ -3,7 +3,8 @@ class GlossarEntry {
   final String description;
   final String? creator;
 
-  const GlossarEntry({required this.title, required this.description, this.creator});
+  const GlossarEntry(
+      {required this.title, required this.description, this.creator});
 
   Map<String, dynamic> toMap() {
     return {
@@ -31,5 +32,11 @@ class GlossarEntry {
       description: description ?? this.description,
       creator: creator ?? this.creator,
     );
+  }
+
+  bool equals(GlossarEntry newEntry) {
+    return title == newEntry.title &&
+        description == newEntry.description &&
+        creator == newEntry.creator;
   }
 }

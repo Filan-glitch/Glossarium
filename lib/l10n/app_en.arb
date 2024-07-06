@@ -35,13 +35,11 @@
     "@fileUnsupportedOrAlreadyExists": {
         "description": "The error message when the file is unsupported or already exists"
     },
-    "addGlossary": "Add a {isShared, plural, =0{local} =1{shared} other{}} glossary",
+    "addGlossary": "Add a {isShared, select, local{local} shared{shared} other{}} glossary",
     "@addGlossary": {
         "description": "The label of the add glossary button",
         "placeholders": {
-            "isShared": {
-                "type": "num"
-            }
+            "isShared": {}
         }
     },
     "enterValidName": "Enter a valid name",
@@ -52,7 +50,7 @@
     "@submit": {
         "description": "The label of the submit button"
     },
-    "glossaryList": "Glossary list",
+    "glossaryList": "Glossary List",
     "@glossaryList": {
         "description": "The title of the glossary list"
     },
@@ -67,5 +65,21 @@
     "createSharedGlossary": "Create shared glossary",
     "@createSharedGlossary": {
         "description": "The label of the create shared glossary button"
+    },
+    "sortOptionTitleIncreasing": "Title (A-Z)",
+    "@sortOptionTitleIncreasing": {
+        "description": "The label of the title increasing sort option"
+    },
+    "sortOptionTitleDecreasing": "Title (Z-A)",
+    "@sortOptionTitleDecreasing": {
+        "description": "The label of the title decreasing sort option"
+    },
+    "sortOptionAuthorIncreasing": "Author (A-Z)",
+    "@sortOptionAuthorIncreasing": {
+        "description": "The label of the author increasing sort option"
+    },
+    "sortOptionAuthorDecreasing": "Author (Z-A)",
+    "@sortOptionAuthorDecreasing": {
+        "description": "The label of the author decreasing sort option"
     }
 }
