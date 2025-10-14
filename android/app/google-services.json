@@ -2,9 +2,38 @@
   "project_info": {
     "project_number": "511119835118",
     "project_id": "glossarium-e5837",
-    "storage_bucket": "glossarium-e5837.appspot.com"
+    "storage_bucket": "glossarium-e5837.firebasestorage.app"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511119835118:android:fb7b20a5e7a6bcc282d8ff",
+        "android_client_info": {
+          "package_name": "de.bot.filan.glossarium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511119835118-hrsrv7tj1pef8gl97sjlgl93a6uhgr0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDNtgAqqV33umT648K1LdG8R_HbGmJSGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511119835118-hrsrv7tj1pef8gl97sjlgl93a6uhgr0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:511119835118:android:1a3fafd9f515849082d8ff",

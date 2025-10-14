@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:glossarium/l10n/app_localizations.dart';
 
 import '../models/glossar.dart';
 import '../redux/state.dart';
 
 class ImportExternDialog extends StatefulWidget {
   final Glossar? glossar;
-  
+
   const ImportExternDialog({super.key, this.glossar});
 
   @override
@@ -16,7 +16,7 @@ class ImportExternDialog extends StatefulWidget {
 
 class _ImportExternDialogState extends State<ImportExternDialog> {
   final _controller = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -35,10 +35,16 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
             converter: (store) => store.state,
             builder: (context, state) {
               return Visibility(
-                visible: _controller.text.isNotEmpty && (state.glossars.any((element) => element.title == _controller.text)),
-                child: Text(AppLocalizations.of(context)!.glossaryAlreadyExists),
+                visible:
+                    _controller.text.isNotEmpty &&
+                    (state.glossars.any(
+                      (element) => element.title == _controller.text,
+                    )),
+                child: Text(
+                  AppLocalizations.of(context)!.glossaryAlreadyExists,
+                ),
               );
-            }
+            },
           ),
         ],
       ),
@@ -51,9 +57,17 @@ class _ImportExternDialogState extends State<ImportExternDialog> {
           converter: (store) => store.state,
           builder: (context, state) {
             return TextButton(
-              onPressed: (_controller.text.isNotEmpty && (state.glossars.any((element) => element.title == _controller.text))) ? null : () {
-                Navigator.of(context).pop(widget.glossar?.copyWith(title: _controller.text));
-              },
+              onPressed:
+                  (_controller.text.isNotEmpty &&
+                      (state.glossars.any(
+                        (element) => element.title == _controller.text,
+                      )))
+                  ? null
+                  : () {
+                      Navigator.of(
+                        context,
+                      ).pop(widget.glossar?.copyWith(title: _controller.text));
+                    },
               child: Text(AppLocalizations.of(context)!.import),
             );
           },

@@ -32,8 +32,9 @@ AppState appReducer(AppState state, dynamic action) {
         glossars: state.glossars.map((glossar) {
           final payload = action.payload as List<Map<String, dynamic>>;
           final List<GlossarEntry> entries = [];
-          for (var entry in payload
-              .where((element) => element['glossary'] == glossar.title)) {
+          for (var entry in payload.where(
+            (element) => element['glossary'] == glossar.title,
+          )) {
             entries.add(GlossarEntry.fromMap(entry));
           }
           glossar = glossar.copyWith(entries: entries);
@@ -42,9 +43,10 @@ AppState appReducer(AppState state, dynamic action) {
       );
     case ActionTypes.removeGlossary:
       return AppState(
-          glossars: state.glossars
-              .where((glossar) => glossar.title != action.payload.title)
-              .toList());
+        glossars: state.glossars
+            .where((glossar) => glossar.title != action.payload.title)
+            .toList(),
+      );
     case ActionTypes.updateGlossaryItem:
       return AppState(
         glossars: state.glossars.map((glossar) {
@@ -76,15 +78,14 @@ AppState appReducer(AppState state, dynamic action) {
           if (glossar.title == action.payload['glossary']) {
             return glossar.copyWith(
               entries: glossar.entries
-                  .where((entry) =>
-                      entry.title != action.payload['title'] as String)
+                  .where(
+                    (entry) => entry.title != action.payload['title'] as String,
+                  )
                   .toList(),
             );
           }
           return glossar;
         }).toList(),
       );
-    default:
-      return state;
   }
 }

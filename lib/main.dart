@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:glossarium/l10n/app_localizations.dart';
 import 'package:glossarium/pages/glossar_list_page.dart';
 import 'package:glossarium/pages/glossar_page.dart';
 import 'package:glossarium/redux/state.dart';
@@ -17,14 +17,13 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseUIAuth.configureProviders([
     GoogleProvider(
-        clientId:
-            '511119835118-69ng32k7lag19ue1vcgj3rn7go5lehsh.apps.googleusercontent.com'),
+      clientId:
+          '511119835118-hrsrv7tj1pef8gl97sjlgl93a6uhgr0l.apps.googleusercontent.com',
+    ),
   ]);
 
   await loadGlossarys();
@@ -48,12 +47,14 @@ class MyApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         title: 'Glossarium',
+        debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.system,
         scaffoldMessengerKey: rootScaffoldMessengerKey,
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        initialRoute:
-            FirebaseAuth.instance.currentUser == null ? '/' : '/glossar-list',
+        initialRoute: FirebaseAuth.instance.currentUser == null
+            ? '/'
+            : '/glossar-list',
         routes: {
           '/': (context) {
             return SignInScreen(
@@ -70,11 +71,9 @@ class MyApp extends StatelessWidget {
                       final defaultDisplayName = user.email!.split('@')[0];
                       user.updateDisplayName(defaultDisplayName);
                     }
-                    Navigator.of(context).pushReplacementNamed(
-                      '/glossar-list',
-                    );
+                    Navigator.of(context).pushReplacementNamed('/glossar-list');
                   }
-                })
+                }),
               ],
             );
           },

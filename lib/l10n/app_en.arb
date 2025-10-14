@@ -81,5 +81,9 @@
     "sortOptionAuthorDecreasing": "Author (Z-A)",
     "@sortOptionAuthorDecreasing": {
         "description": "The label of the author decreasing sort option"
+    },
+    "joinSharedGlossary": "Join shared glossary",
+    "@joinSharedGlossary": {
+        "description": "The label of the join shared glossary button"
     }
 }

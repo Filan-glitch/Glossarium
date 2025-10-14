@@ -1,4 +1,4 @@
-package de.bot.glossarium.glossarium
+package de.bot.filan.glossarium
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +11,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import android.provider.OpenableColumns
 
-class MainActivity: FlutterActivity() {
-
+class MainActivity : FlutterActivity() {
     private val CHANNEL = "glossarium.process.csv"
     private var data: String? = null
 

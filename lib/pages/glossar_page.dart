@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:glossarium/l10n/app_localizations.dart';
 import 'package:glossarium/main.dart';
 import 'package:glossarium/models/glossar.dart';
 import 'package:glossarium/storage/database.dart';
@@ -44,13 +44,13 @@ class _GlossarPageState extends State<GlossarPage>
   // Define sorting options
   final List<String> _sortOptions = [
     AppLocalizations.of(rootBuildContext!)!.sortOptionAuthorIncreasing,
-    AppLocalizations.of(rootBuildContext!)!.sortOptionAuthorDecreasing
+    AppLocalizations.of(rootBuildContext!)!.sortOptionAuthorDecreasing,
   ];
   String _currentSortOption = 'Titel (A-Z)';
 
   // Define a variable to hold the current selected sorting option
-  int Function(GlossarEntry, GlossarEntry) _currentSortFunction =
-      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase());
+  int Function(GlossarEntry, GlossarEntry) _currentSortFunction = (a, b) =>
+      a.title.toLowerCase().compareTo(b.title.toLowerCase());
 
   @override
   void initState() {
@@ -61,120 +61,141 @@ class _GlossarPageState extends State<GlossarPage>
         log('Glossar ID: ${_glossar?.id}');
         _listener = (_glossar!.isSynced)
             ? FirebaseFirestore.instance
-                .collection('glossarys')
-                .doc(_glossar?.id)
-                .collection('entrys')
-                .snapshots()
-                .listen((event) {
-                log('Glossar changed: ${event.docChanges.length}');
-                for (var change in event.docChanges) {
-                  switch (change.type) {
-                    case DocumentChangeType.added:
-                      log('Item added: ${change.doc.id}');
+                  .collection('glossarys')
+                  .doc(_glossar?.id)
+                  .collection('entrys')
+                  .snapshots()
+                  .listen((event) {
+                    log('Glossar changed: ${event.docChanges.length}');
+                    for (var change in event.docChanges) {
+                      switch (change.type) {
+                        case DocumentChangeType.added:
+                          log('Item added: ${change.doc.id}');
 
-                      if (_glossar!.entries
-                          .any((entry) => entry.title == change.doc.id)) {
-                        log('Item already exists');
-                        store.dispatch(actions.Action(
-                          actions.ActionTypes.updateGlossaryItem,
-                          payload: GlossarEntry(
-                            title: change.doc.id,
-                            description:
-                                change.doc.data()?['description'] ?? '',
-                            creator: change.doc.data()?['creator'],
-                          ).toMap(),
-                        ));
-                        setState(() {
-                          _glossar = _glossar?.copyWith(
-                              entries: _glossar!.entries.map((entry) {
-                            if (entry.title == change.doc.id) {
-                              return GlossarEntry(
+                          if (_glossar!.entries.any(
+                            (entry) => entry.title == change.doc.id,
+                          )) {
+                            log('Item already exists');
+                            store.dispatch(
+                              actions.Action(
+                                actions.ActionTypes.updateGlossaryItem,
+                                payload: GlossarEntry(
+                                  title: change.doc.id,
+                                  description:
+                                      change.doc.data()?['description'] ?? '',
+                                  creator: change.doc.data()?['creator'],
+                                ).toMap(),
+                              ),
+                            );
+                            setState(() {
+                              _glossar = _glossar?.copyWith(
+                                entries: _glossar!.entries.map((entry) {
+                                  if (entry.title == change.doc.id) {
+                                    return GlossarEntry(
+                                      title: change.doc.id,
+                                      description:
+                                          change.doc.data()?['description'] ??
+                                          '',
+                                      creator: change.doc.data()?['creator'],
+                                    );
+                                  }
+                                  return entry;
+                                }).toList(),
+                              );
+                            });
+                            _filterGlossarEntrys();
+                            break;
+                          }
+
+                          store.dispatch(
+                            actions.Action(
+                              actions.ActionTypes.addGlossaryItem,
+                              payload: GlossarEntry(
                                 title: change.doc.id,
                                 description:
                                     change.doc.data()?['description'] ?? '',
                                 creator: change.doc.data()?['creator'],
-                              );
-                            }
-                            return entry;
-                          }).toList());
-                        });
-                        _filterGlossarEntrys();
-                        break;
-                      }
-
-                      store.dispatch(actions.Action(
-                        actions.ActionTypes.addGlossaryItem,
-                        payload: GlossarEntry(
-                          title: change.doc.id,
-                          description: change.doc.data()?['description'] ?? '',
-                          creator: change.doc.data()?['creator'],
-                        ).toMap(),
-                      ));
-                      setState(() {
-                        _glossar = _glossar?.copyWith(entries: [
-                          ..._glossar!.entries,
-                          GlossarEntry(
-                            title: change.doc.id,
-                            description:
-                                change.doc.data()?['description'] ?? '',
-                            creator: change.doc.data()?['creator'],
-                          )
-                        ]);
-                      });
-                      _filterGlossarEntrys();
-                      break;
-                    case DocumentChangeType.modified:
-                      log('Item modified: ${change.doc.id}');
-                      store.dispatch(actions.Action(
-                        actions.ActionTypes.updateGlossaryItem,
-                        payload: GlossarEntry(
-                          title: change.doc.id,
-                          description: change.doc.data()?['description'] ?? '',
-                          creator: change.doc.data()?['creator'],
-                        ).toMap(),
-                      ));
-                      setState(() {
-                        _glossar = _glossar?.copyWith(
-                            entries: _glossar!.entries.map((entry) {
-                          if (entry.title == change.doc.id) {
-                            return GlossarEntry(
-                              title: change.doc.id,
-                              description:
-                                  change.doc.data()?['description'] ?? '',
-                              creator: change.doc.data()?['creator'],
+                              ).toMap(),
+                            ),
+                          );
+                          setState(() {
+                            _glossar = _glossar?.copyWith(
+                              entries: [
+                                ..._glossar!.entries,
+                                GlossarEntry(
+                                  title: change.doc.id,
+                                  description:
+                                      change.doc.data()?['description'] ?? '',
+                                  creator: change.doc.data()?['creator'],
+                                ),
+                              ],
                             );
-                          }
-                          return entry;
-                        }).toList());
-                      });
-                      _filterGlossarEntrys();
-                      break;
-                    case DocumentChangeType.removed:
-                      log('Item removed: ${change.doc.id}');
-                      store.dispatch(actions.Action(
-                        actions.ActionTypes.removeGlossaryItem,
-                        payload: {
-                          'title': change.doc.id,
-                          'glossary': _glossar!.title,
-                        },
-                      ));
-                      setState(() {
-                        _glossar = _glossar?.copyWith(
-                            entries: _glossar!.entries
-                                .where((entry) => entry.title != change.doc.id)
-                                .toList());
-                      });
-                      _filterGlossarEntrys();
-                      break;
-                  }
-                }
-              })
+                          });
+                          _filterGlossarEntrys();
+                          break;
+                        case DocumentChangeType.modified:
+                          log('Item modified: ${change.doc.id}');
+                          store.dispatch(
+                            actions.Action(
+                              actions.ActionTypes.updateGlossaryItem,
+                              payload: GlossarEntry(
+                                title: change.doc.id,
+                                description:
+                                    change.doc.data()?['description'] ?? '',
+                                creator: change.doc.data()?['creator'],
+                              ).toMap(),
+                            ),
+                          );
+                          setState(() {
+                            _glossar = _glossar?.copyWith(
+                              entries: _glossar!.entries.map((entry) {
+                                if (entry.title == change.doc.id) {
+                                  return GlossarEntry(
+                                    title: change.doc.id,
+                                    description:
+                                        change.doc.data()?['description'] ?? '',
+                                    creator: change.doc.data()?['creator'],
+                                  );
+                                }
+                                return entry;
+                              }).toList(),
+                            );
+                          });
+                          _filterGlossarEntrys();
+                          break;
+                        case DocumentChangeType.removed:
+                          log('Item removed: ${change.doc.id}');
+                          store.dispatch(
+                            actions.Action(
+                              actions.ActionTypes.removeGlossaryItem,
+                              payload: {
+                                'title': change.doc.id,
+                                'glossary': _glossar!.title,
+                              },
+                            ),
+                          );
+                          setState(() {
+                            _glossar = _glossar?.copyWith(
+                              entries: _glossar!.entries
+                                  .where(
+                                    (entry) => entry.title != change.doc.id,
+                                  )
+                                  .toList(),
+                            );
+                          });
+                          _filterGlossarEntrys();
+                          break;
+                      }
+                    }
+                  })
             : null;
         if (_glossar!.isSynced) {
-          _sortOptions
-              .add(AppLocalizations.of(context)!.sortOptionAuthorIncreasing);
-          _sortOptions
-              .add(AppLocalizations.of(context)!.sortOptionAuthorDecreasing);
+          _sortOptions.add(
+            AppLocalizations.of(context)!.sortOptionAuthorIncreasing,
+          );
+          _sortOptions.add(
+            AppLocalizations.of(context)!.sortOptionAuthorDecreasing,
+          );
         }
       });
       _filterGlossarEntrys();
@@ -212,8 +233,9 @@ class _GlossarPageState extends State<GlossarPage>
                       return 'Bitte gib einen Begriff ein';
                     }
                     if (oldEntry == null &&
-                        _glossar!.entries
-                            .any((entry) => entry.title == value)) {
+                        _glossar!.entries.any(
+                          (entry) => entry.title == value,
+                        )) {
                       return 'Dieser Begriff existiert bereits';
                     }
                     if (value.contains('[\\;]')) {
@@ -230,8 +252,9 @@ class _GlossarPageState extends State<GlossarPage>
                 ),
                 Expanded(
                   child: TextFormField(
-                    decoration:
-                        const InputDecoration(labelText: 'Beschreibung'),
+                    decoration: const InputDecoration(
+                      labelText: 'Beschreibung',
+                    ),
                     initialValue: oldEntry?.description,
                     maxLines: null,
                     onSaved: (value) {
@@ -253,7 +276,7 @@ class _GlossarPageState extends State<GlossarPage>
                       return null;
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -286,33 +309,36 @@ class _GlossarPageState extends State<GlossarPage>
       }
       final entryMap = newEntry.toMap();
       entryMap['glossary'] = _glossar!.title;
-      store.dispatch(actions.Action(
-        actions.ActionTypes.updateGlossaryItem,
-        payload: entryMap,
-      ));
+      store.dispatch(
+        actions.Action(
+          actions.ActionTypes.updateGlossaryItem,
+          payload: entryMap,
+        ),
+      );
       if (_glossar!.isSynced) updateSyncGlossaryEntry(_glossar!.id!, newEntry);
       setState(() {
         _glossar = _glossar?.copyWith(
-            entries: _glossar!.entries.map((entry) {
-          if (entry.title == oldEntry.title) {
-            return newEntry;
-          }
-          return entry;
-        }).toList());
+          entries: _glossar!.entries.map((entry) {
+            if (entry.title == oldEntry.title) {
+              return newEntry;
+            }
+            return entry;
+          }).toList(),
+        );
       });
     } else {
       final entryMap = newEntry.toMap();
       entryMap['glossary'] = _glossar!.title;
-      store.dispatch(actions.Action(
-        actions.ActionTypes.addGlossaryItem,
-        payload: entryMap,
-      ));
+      store.dispatch(
+        actions.Action(actions.ActionTypes.addGlossaryItem, payload: entryMap),
+      );
       if (_glossar!.isSynced) {
         addSyncGlossaryEntry(_glossar!.id!, newEntry);
       } else {
         setState(() {
-          _glossar =
-              _glossar?.copyWith(entries: [..._glossar!.entries, newEntry]);
+          _glossar = _glossar?.copyWith(
+            entries: [..._glossar!.entries, newEntry],
+          );
         });
       }
     }
@@ -323,13 +349,15 @@ class _GlossarPageState extends State<GlossarPage>
   void _filterGlossarEntrys() {
     setState(() {
       _filteredGlossarEntrys = (_glossar?.entries ?? [])
-          .where((entry) =>
-              entry.title
-                  .toLowerCase()
-                  .contains(_searchController.text.toLowerCase()) ||
-              entry.description
-                  .toLowerCase()
-                  .contains(_searchController.text.toLowerCase()))
+          .where(
+            (entry) =>
+                entry.title.toLowerCase().contains(
+                  _searchController.text.toLowerCase(),
+                ) ||
+                entry.description.toLowerCase().contains(
+                  _searchController.text.toLowerCase(),
+                ),
+          )
           .toList();
       _filteredGlossarEntrys.sort(_currentSortFunction);
     });
@@ -337,13 +365,16 @@ class _GlossarPageState extends State<GlossarPage>
 
   Future<void> _exportAsPdf() async {
     final pdf = pw.Document();
-    final regular =
-        pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Regular.ttf'));
-    final bold =
-        pw.Font.ttf(await rootBundle.load('assets/fonts/Roboto-Bold.ttf'));
+    final regular = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Roboto-Regular.ttf'),
+    );
+    final bold = pw.Font.ttf(
+      await rootBundle.load('assets/fonts/Roboto-Bold.ttf'),
+    );
 
-    _glossar?.entries
-        .sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+    _glossar?.entries.sort(
+      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+    );
 
     pdf.addPage(
       pw.Page(
@@ -355,51 +386,73 @@ class _GlossarPageState extends State<GlossarPage>
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Center(
-                    child: pw.Text(_glossar!.title,
-                        style: pw.TextStyle(
-                            font: bold,
-                            fontSize: 30,
-                            fontWeight: pw.FontWeight.bold),
-                        textAlign: pw.TextAlign.center)),
+                  child: pw.Text(
+                    _glossar!.title,
+                    style: pw.TextStyle(
+                      font: bold,
+                      fontSize: 30,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                    textAlign: pw.TextAlign.center,
+                  ),
+                ),
                 pw.SizedBox(height: 20),
                 pw.Center(
-                  child: pw.Text('${_glossar!.entries.length} Einträge',
-                      style: pw.TextStyle(
-                          font: regular,
-                          fontSize: 20,
-                          fontWeight: pw.FontWeight.normal)),
-                )
+                  child: pw.Text(
+                    '${_glossar!.entries.length} Einträge',
+                    style: pw.TextStyle(
+                      font: regular,
+                      fontSize: 20,
+                      fontWeight: pw.FontWeight.normal,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
         },
       ),
     );
-    pdf.addPage(pw.MultiPage(
+    pdf.addPage(
+      pw.MultiPage(
         build: (pw.Context context) => _glossar!.entries
-            .map((entry) => pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(entry.title,
-                        style: pw.TextStyle(
-                            font: bold, fontWeight: pw.FontWeight.bold)),
-                    pw.SizedBox(height: 10),
-                    pw.Text(entry.description,
-                        style: pw.TextStyle(
-                            font: regular, fontWeight: pw.FontWeight.normal)),
-                    pw.SizedBox(height: 20),
-                  ],
-                ))
-            .toList()));
+            .map(
+              (entry) => pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                    entry.title,
+                    style: pw.TextStyle(
+                      font: bold,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Text(
+                    entry.description,
+                    style: pw.TextStyle(
+                      font: regular,
+                      fontWeight: pw.FontWeight.normal,
+                    ),
+                  ),
+                  pw.SizedBox(height: 20),
+                ],
+              ),
+            )
+            .toList(),
+      ),
+    );
     var file = File(
-        '/storage/emulated/0/Download/${_glossar?.title ?? 'glossary'}.pdf');
+      '/storage/emulated/0/Download/${_glossar?.title ?? 'glossary'}.pdf',
+    );
     try {
       if (await file.exists()) {
         await file.delete();
       }
     } on FileSystemException {
       file = File(
-          '/storage/emulated/0/Download/${_glossar?.title ?? 'glossary'}-${DateTime.now().millisecondsSinceEpoch}.pdf');
+        '/storage/emulated/0/Download/${_glossar?.title ?? 'glossary'}-${DateTime.now().millisecondsSinceEpoch}.pdf',
+      );
     }
     try {
       await file.writeAsBytes(await pdf.save());
@@ -425,52 +478,80 @@ class _GlossarPageState extends State<GlossarPage>
     );
   }
 
-  List<TextSpan> _highlightOccurrences(String source, String query,
-      String? creator, TextStyle style, TextStyle highlightStyle) {
+  List<TextSpan> _highlightOccurrences(
+    String source,
+    String query,
+    String? creator,
+    TextStyle style,
+    TextStyle highlightStyle,
+  ) {
     if (query.isEmpty) {
       return [
         TextSpan(text: source, style: style),
         (creator != null)
             ? TextSpan(
-                text: ' ($creator)', style: const TextStyle(color: Colors.blue))
-            : const TextSpan()
+                text: ' ($creator)',
+                style: const TextStyle(color: Colors.blue),
+              )
+            : const TextSpan(),
       ];
     }
     final splitMap = source.toLowerCase().split(query);
     final List<TextSpan> spans = [];
     var currentIndex = 0;
     for (var element in splitMap) {
-      spans.add(TextSpan(
+      spans.add(
+        TextSpan(
           text: source.substring(currentIndex, currentIndex + element.length),
-          style: style));
+          style: style,
+        ),
+      );
       currentIndex += element.length;
       if (currentIndex < source.length) {
-        spans.add(TextSpan(
+        spans.add(
+          TextSpan(
             text: source.substring(currentIndex, currentIndex + query.length),
-            style: highlightStyle));
+            style: highlightStyle,
+          ),
+        );
         currentIndex += query.length;
       }
     }
-    if (creator != null)
-      spans.add(TextSpan(
-          text: ' ($creator)', style: const TextStyle(color: Colors.blue)));
+    if (creator != null) {
+      spans.add(
+        TextSpan(
+          text: ' ($creator)',
+          style: const TextStyle(color: Colors.blue),
+        ),
+      );
+    }
     return spans;
   }
 
   Future<void> _exportAsCSV() async {
-    final path = join((await getApplicationCacheDirectory()).path,
-        '${_glossar?.title ?? 'glossary'}.csv');
+    final path = join(
+      (await getApplicationCacheDirectory()).path,
+      '${_glossar?.title ?? 'glossary'}.csv',
+    );
     final file = File(path);
     final csv =
         'Begriff;Beschreibung\n${_glossar?.entries.map((entry) => '${entry.title};${entry.description}').join('\n') ?? ''}';
     await file.writeAsString(csv, mode: FileMode.writeOnly, flush: true);
-    Share.shareXFiles([XFile(file.path, mimeType: 'text/csv')],
-        text: 'Glossar exportiert');
+    SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path, mimeType: 'text/csv')],
+        text: 'Glossar exportiert',
+      ),
+    );
   }
 
   Future<void> _exportSynced() async {
-    Share.share(
-        'Tritt dem Glossar ${_glossar?.title} mit dem Code: ${_glossar?.id} bei.');
+    SharePlus.instance.share(
+      ShareParams(
+        text:
+            'Tritt dem Glossar ${_glossar?.title} mit dem Code: ${_glossar?.id} bei.',
+      ),
+    );
   }
 
   Future<void> _removeEntries() async {
@@ -483,9 +564,10 @@ class _GlossarPageState extends State<GlossarPage>
     }
     setState(() {
       _glossar = _glossar?.copyWith(
-          entries: _glossar!.entries
-              .where((entry) => !_selectedGlossarEntrys.contains(entry))
-              .toList());
+        entries: _glossar!.entries
+            .where((entry) => !_selectedGlossarEntrys.contains(entry))
+            .toList(),
+      );
     });
     _selectedGlossarEntrys.clear();
     _filterGlossarEntrys();
@@ -510,14 +592,15 @@ class _GlossarPageState extends State<GlossarPage>
 
   Future<Glossar?> _selectGlossar() async {
     return await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context)!.selectGlossary),
-            content: _buildGlossarDropdown(),
-            actions: _buildDialogActions(),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.selectGlossary),
+          content: _buildGlossarDropdown(),
+          actions: _buildDialogActions(),
+        );
+      },
+    );
   }
 
   DropdownButtonFormField<Glossar> _buildGlossarDropdown() {
@@ -536,14 +619,12 @@ class _GlossarPageState extends State<GlossarPage>
     return store.state.glossars
         .where((glossar) => glossar.title != _glossar?.title)
         .map<DropdownMenuItem<Glossar>>((Glossar value) {
-      return DropdownMenuItem<Glossar>(
-        value: value,
-        child: Text(
-          value.title,
-          textAlign: TextAlign.center,
-        ),
-      );
-    }).toList();
+          return DropdownMenuItem<Glossar>(
+            value: value,
+            child: Text(value.title, textAlign: TextAlign.center),
+          );
+        })
+        .toList();
   }
 
   List<Widget> _buildDialogActions() {
@@ -566,10 +647,9 @@ class _GlossarPageState extends State<GlossarPage>
   void _addEntryToGlossar(Glossar glossar, GlossarEntry entry) {
     final entryMap = entry.toMap();
     entryMap['glossary'] = glossar.title;
-    store.dispatch(actions.Action(
-      actions.ActionTypes.addGlossaryItem,
-      payload: entryMap,
-    ));
+    store.dispatch(
+      actions.Action(actions.ActionTypes.addGlossaryItem, payload: entryMap),
+    );
     if (glossar.isSynced) addSyncGlossaryEntry(glossar.id!, entry);
   }
 
@@ -581,20 +661,21 @@ class _GlossarPageState extends State<GlossarPage>
         actions: [
           if (_selectedGlossarEntrys.isNotEmpty)
             IconButton(
-                icon: const Icon(Icons.check_box),
-                onPressed: () {
-                  if (_selectedGlossarEntrys.length ==
-                      _filteredGlossarEntrys.length) {
-                    setState(() {
-                      _selectedGlossarEntrys.clear();
-                    });
-                  } else {
-                    setState(() {
-                      _selectedGlossarEntrys.clear();
-                      _selectedGlossarEntrys.addAll(_filteredGlossarEntrys);
-                    });
-                  }
-                }),
+              icon: const Icon(Icons.check_box),
+              onPressed: () {
+                if (_selectedGlossarEntrys.length ==
+                    _filteredGlossarEntrys.length) {
+                  setState(() {
+                    _selectedGlossarEntrys.clear();
+                  });
+                } else {
+                  setState(() {
+                    _selectedGlossarEntrys.clear();
+                    _selectedGlossarEntrys.addAll(_filteredGlossarEntrys);
+                  });
+                }
+              },
+            ),
           (_selectedGlossarEntrys.isEmpty)
               ? IconButton(
                   icon: const Icon(Icons.picture_as_pdf),
@@ -655,26 +736,30 @@ class _GlossarPageState extends State<GlossarPage>
                       _currentSortOption = newValue!;
                       // Sort the _filteredGlossarEntrys list based on the selected option
                       if (_currentSortOption ==
-                          AppLocalizations.of(context)!
-                              .sortOptionTitleIncreasing) {
+                          AppLocalizations.of(
+                            context,
+                          )!.sortOptionTitleIncreasing) {
                         _currentSortFunction = (a, b) => a.title
                             .toLowerCase()
                             .compareTo(b.title.toLowerCase());
                       } else if (_currentSortOption ==
-                          AppLocalizations.of(context)!
-                              .sortOptionTitleDecreasing) {
+                          AppLocalizations.of(
+                            context,
+                          )!.sortOptionTitleDecreasing) {
                         _currentSortFunction = (a, b) => b.title
                             .toLowerCase()
                             .compareTo(a.title.toLowerCase());
                       } else if (_currentSortOption ==
-                          AppLocalizations.of(context)!
-                              .sortOptionAuthorIncreasing) {
+                          AppLocalizations.of(
+                            context,
+                          )!.sortOptionAuthorIncreasing) {
                         _currentSortFunction = (a, b) => a.creator!
                             .toLowerCase()
                             .compareTo(b.creator!.toLowerCase());
                       } else if (_currentSortOption ==
-                          AppLocalizations.of(context)!
-                              .sortOptionAuthorDecreasing) {
+                          AppLocalizations.of(
+                            context,
+                          )!.sortOptionAuthorDecreasing) {
                         _currentSortFunction = (a, b) => b.creator!
                             .toLowerCase()
                             .compareTo(a.creator!.toLowerCase());
@@ -682,14 +767,12 @@ class _GlossarPageState extends State<GlossarPage>
                       _filteredGlossarEntrys.sort(_currentSortFunction);
                     });
                   },
-                  items: _sortOptions
-                      .map<DropdownMenuItem<String>>((String value) {
+                  items: _sortOptions.map<DropdownMenuItem<String>>((
+                    String value,
+                  ) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(
-                        value,
-                        textAlign: TextAlign.center,
-                      ),
+                      child: Text(value, textAlign: TextAlign.center),
                     );
                   }).toList(),
                 ),
@@ -711,23 +794,29 @@ class _GlossarPageState extends State<GlossarPage>
                   title: RichText(
                     text: TextSpan(
                       children: _highlightOccurrences(
-                          title,
-                          searchText,
-                          _filteredGlossarEntrys[index].creator,
-                          const TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                          const TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold)),
+                        title,
+                        searchText,
+                        _filteredGlossarEntrys[index].creator,
+                        const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   subtitle: RichText(
                     text: TextSpan(
                       children: _highlightOccurrences(
-                          description,
-                          searchText,
-                          null,
-                          const TextStyle(color: Colors.black),
-                          const TextStyle(color: Colors.red)),
+                        description,
+                        searchText,
+                        null,
+                        const TextStyle(color: Colors.black),
+                        const TextStyle(color: Colors.red),
+                      ),
                     ),
                   ),
                   onTap: () {
@@ -735,18 +824,22 @@ class _GlossarPageState extends State<GlossarPage>
                   },
                   onLongPress: () async {
                     setState(() {
-                      if (_selectedGlossarEntrys
-                          .contains(_filteredGlossarEntrys[index])) {
-                        _selectedGlossarEntrys
-                            .remove(_filteredGlossarEntrys[index]);
+                      if (_selectedGlossarEntrys.contains(
+                        _filteredGlossarEntrys[index],
+                      )) {
+                        _selectedGlossarEntrys.remove(
+                          _filteredGlossarEntrys[index],
+                        );
                       } else {
-                        _selectedGlossarEntrys
-                            .add(_filteredGlossarEntrys[index]);
+                        _selectedGlossarEntrys.add(
+                          _filteredGlossarEntrys[index],
+                        );
                       }
                     });
                   },
-                  selected: _selectedGlossarEntrys
-                      .contains(_filteredGlossarEntrys[index]),
+                  selected: _selectedGlossarEntrys.contains(
+                    _filteredGlossarEntrys[index],
+                  ),
                   selectedTileColor: Colors.grey[300],
                 );
               },

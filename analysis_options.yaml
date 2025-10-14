@@ -1,10 +1,10 @@
-include: package:lints/core.yaml, package:lints/flutter.yaml
+include: package:lints/core.yaml
 
 analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
-  exclude: [build/**, .dart_tool/**, .packages, .flutter-plugins, .flutter-plugins-dependencies, lib/firebase_options.dart]
+  exclude: [ build/**, .dart_tool/**, .packages, .flutter-plugins, .flutter-plugins-dependencies, lib/firebase_options.dart ]
   errors:
     unused_local_variable: error
     unused_element: info
